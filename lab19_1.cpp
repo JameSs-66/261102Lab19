@@ -35,43 +35,48 @@ void importDataFromFile(string filename, vector<string> &name,  vector<int> &sco
 }
 
 void getCommand(string &cmd, string &key){
-    cout << "Please input your command : ";
-    cin >> cmd >> key;
+    cout << "Please input your command: ";
+    cin >> cmd;
+    if (toUpperStr(cmd) != "NAME" && toUpperStr(cmd) != "GRADE" && toUpperStr(cmd) != "EXIT") return;
+    cin.ignore();
+    getline(cin,key);
+    
 }
+
 
 void searchName(vector<string> name, vector<int> scores, vector<char> grade, string key){
     cout << "---------------------------------\n";
     int nLength = name.size();
     bool founded = 1;
     for(int i = 0; i < nLength; ++i){
-        if(toUpperStr(name[i]) == toUpperStr(key)){
+        if(toUpperStr(name[i]) == key){
             cout << name[i] << "'s score = " << scores[i] << endl;
-            cout << name[i] << "'s score = " << grade[i] << endl;
+            cout << name[i] << "'s grade = " << grade[i] << endl;
             founded = 0;
     }
         } 
     if(founded) {
         cout << "Cannot found.\n";
     }
-    cout << "---------------------------------";
+    cout << "---------------------------------\n";
 }
+
 
 void searchGrade(vector<string> name, vector<int> scores, vector<char> grade, string key){
     cout << "---------------------------------\n" ;
     int gLength = name.size();
-    bool founded = 1;
+    bool founded = 0;
     for(int i = 0; i < gLength; ++i){
-        string grd(1,grade.at(i));
-        if(grd == toUpperStr(key)){
-
-            cout << name[i] << scores[i] << grade[i];
-            founded = 0;
+        string gradeCh(1,grade.at(i));
+        if(gradeCh == key){
+            cout << name[i] << " (" << scores[i] << ")" << endl;
+            founded = 1;
+        }
     }
-        } 
-    if(founded) {
+    if(!founded) {
         cout << "Cannot found.\n";
     }
-    cout << "---------------------------------";
+    cout << "---------------------------------\n";
 }
 
 
@@ -82,7 +87,7 @@ int main(){
     vector<int> scores;
     vector<char> grades; 
     importDataFromFile(filename, names, scores, grades);
-
+    
     do{
         string command, key;
         getCommand(command,key);

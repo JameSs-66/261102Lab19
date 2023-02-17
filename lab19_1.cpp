@@ -20,21 +20,60 @@ string toUpperStr(string x){
     return y;
 }
 
-void importDataFromFile(){
-
+void importDataFromFile(string filename, vector<string> &name,  vector<int> &scores,  vector<char> &grade){
+    ifstream datafile(filename.c_str()); 
+    string text;
+    char n[100];
+    char format[] = "%[^:]: %d %d %d";
+    while(getline(datafile,text)){
+        int score[3];
+        sscanf(text.c_str(),format, n , &score[0], &score[1], &score[2]);
+        name.push_back(n);
+        scores.push_back(score[0] + score[1] + score[2]);
+        grade.push_back(score2grade(score[0] + score[1] + score[2]));
+    }
 }
 
-void getCommand(){
-
+void getCommand(string &cmd, string &key){
+    cout << "Please input your command : ";
+    cin >> cmd >> key;
 }
 
-void searchName(){
-
+void searchName(vector<string> name, vector<int> scores, vector<char> grade, string key){
+    cout << "---------------------------------\n";
+    int nLength = name.size();
+    bool founded = 1;
+    for(int i = 0; i < nLength; ++i){
+        if(toUpperStr(name[i]) == toUpperStr(key)){
+            cout << name[i] << "'s score = " << scores[i] << endl;
+            cout << name[i] << "'s score = " << grade[i] << endl;
+            founded = 0;
+    }
+        } 
+    if(founded) {
+        cout << "Cannot found.\n";
+    }
+    cout << "---------------------------------";
 }
 
-void searchGrade(){
+void searchGrade(vector<string> name, vector<int> scores, vector<char> grade, string key){
+    cout << "---------------------------------\n" ;
+    int gLength = name.size();
+    bool founded = 1;
+    for(int i = 0; i < gLength; ++i){
+        string grd(1,grade.at(i));
+        if(grd == toUpperStr(key)){
 
+            cout << name[i] << scores[i] << grade[i];
+            founded = 0;
+    }
+        } 
+    if(founded) {
+        cout << "Cannot found.\n";
+    }
+    cout << "---------------------------------";
 }
+
 
 
 int main(){
@@ -43,7 +82,7 @@ int main(){
     vector<int> scores;
     vector<char> grades; 
     importDataFromFile(filename, names, scores, grades);
-    
+
     do{
         string command, key;
         getCommand(command,key);
